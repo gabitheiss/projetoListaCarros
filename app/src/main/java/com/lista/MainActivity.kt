@@ -1,39 +1,48 @@
 package com.lista
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.lista.adapter.AdapterRecyclerView
 import com.lista.model.Car
+import com.lista.singleton.CarListaControle
 
 class MainActivity : AppCompatActivity() {
 
     // toda vez que iniciar uma variavel e depois jogar um valor para ela, é usado lateinit
     private lateinit var carRecyclerView: RecyclerView
+    //criar variavel para o adapter
+    private lateinit var adapter: AdapterRecyclerView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        findViewById<Button>(R.id.ButtonTelaSeguinte).setOnClickListener{
+            val segundaTela = Intent (this, MainActivity2::class.java)
+            startActivity(segundaTela)
+        }
 
-        val listOfCars = listOf<Car>(
-            Car("Chevrolet", "Celta" , 2012),
-            Car("Chevrolet", "S10" , 2020),
-            Car("Fiat", "Palio" , 2018),
-            Car("Fiat", "Strada" , 2010),
-            Car("VM", "Gol" , 2010),
-            Car("VM", "Amarok" , 2010),
 
-        )
+        //atribuir valor à variavel adapter
+        adapter = AdapterRecyclerView(CarListaControle.listaCarros)
+
+
 
         carRecyclerView = findViewById(R.id.carsRecyclerView)
         carRecyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
-        carRecyclerView.adapter = AdapterRecyclerView(listOfCars)
-
+        carRecyclerView.adapter = adapter
 
 
 
     }
-}
+       override fun onResume(){
+       adapter.refresh(CarListaControle.listaCarros)
+       super.onResume()
+        }
+    }

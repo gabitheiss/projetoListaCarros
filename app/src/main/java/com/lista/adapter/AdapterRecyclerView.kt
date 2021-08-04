@@ -7,6 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.lista.R
 import com.lista.model.Car
+import com.lista.singleton.CarListaControle
+import com.lista.singleton.CarListaControle.listaCarros
 
 class AdapterRecyclerView (
     var listOfCars : List<Car>
@@ -25,6 +27,14 @@ class AdapterRecyclerView (
     override fun getItemCount(): Int {
         return listOfCars.size
     }
+
+    //refresh para remover e atualizar lista nova (singleton)
+    fun refresh(novaLista: MutableList<Car>){
+        listOfCars = novaLista
+        notifyDataSetChanged()
+
+    }
+
 }
 
 
